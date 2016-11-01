@@ -13,12 +13,16 @@ It saves started jobs info into redis hash and checks whether any job stays ther
 
 ### Installation
 Add this line to your application's Gemfile:
+    
     gem 'attentive_sidekiq'
+
 And then execute:
+
     $ bundle
 
 ### Usage
 Configure your middleware chains, lookup Middleware usage on Sidekiq wiki for more info.
+
     Sidekiq.configure_server do |config|
       config.server_middleware do |chain|
         chain.add AttentiveSidekiq::Middleware::Server::Attentionist
@@ -33,6 +37,7 @@ Configure your middleware chains, lookup Middleware usage on Sidekiq wiki for mo
         chain.add AttentiveSidekiq::Middleware::Client::Attentionist
       end
     end
+
 After that you can use your jobs as usual.
 
 ### Sidekiq Web integration
