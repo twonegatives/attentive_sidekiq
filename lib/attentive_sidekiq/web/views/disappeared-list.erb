@@ -1,0 +1,27 @@
+<h3><%= t('disappeared_jobs') %></h3>
+
+<div class="table_container">
+  <table class="table table-hover table-bordered table-striped table-white">
+    <thead>
+      <tr>
+        <th><%= t('jid') %></th>
+        <th><%= t('queue') %></th>
+        <th><%= t('class') %></th>
+        <th><%= t('arguments') %></th>
+        <th><%= t('time') %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @suspicious_jobs.each do |job| %>
+        <tr>
+          <td><%= job['jid'] %></td>
+          <td><%= job['queue'] %></td>
+          <td><%= job['class'] %></td>
+          <td><%= job['args'] %></td>
+          <td><%= Time.at(job['created_at']).strftime("%H:%M:%S %d.%m.%Y %z") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

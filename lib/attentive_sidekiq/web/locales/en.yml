@@ -1,0 +1,7 @@
+en:
+  jid: JID
+  queue: Queue name
+  class: Class name
+  arguments: Arguments
+  disappeared_jobs: Disappeared jobs
+  time: When

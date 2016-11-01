@@ -1,0 +1,7 @@
+ru:
+  jid: JID
+  queue: Очередь
+  class: Задача
+  arguments: Аргументы
+  disappeared_jobs: Пропавшие задачи
+  time: Время

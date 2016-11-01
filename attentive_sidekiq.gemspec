@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'attentive_sidekiq'
-  s.version     = '0.0.0'
+  s.version     = '0.0.1'
   s.date        = '2016-10-31'
   s.summary     = "Make your sidekiq to be attentive to lost jobs"
   s.description = "This gem allows you to watch the jobs which suddenly dissappeared from redis without being completed by redis worker"
