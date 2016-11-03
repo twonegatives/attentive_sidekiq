@@ -1,6 +1,6 @@
 module AttentiveSidekiq
   module Middleware
-  	module Server
+    module Server
       class Attentionist
 
         def call(worker_instance, item, queue)

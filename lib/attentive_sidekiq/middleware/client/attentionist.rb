@@ -18,7 +18,7 @@ module AttentiveSidekiq
 
         #def rerun?(jid)
         #  Sidekiq.redis{|conn| conn.hexists(AttentiveSidekiq::Middleware::REDIS_KEY, jid) } == 1
-      	#end
+        #end
       end
     end
   end
