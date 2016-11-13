@@ -5,6 +5,9 @@ class ServerMiddlewareTest < Minitest::Unit::TestCase
     before do
       Sidekiq.redis = REDIS
       Sidekiq.redis{ |c| c.flushdb }
+
+      @mutex = Mutex.new
+      @stopper = ConditionVariable.new
     end
 
     class HardWorker
@@ -84,7 +87,7 @@ class ServerMiddlewareTest < Minitest::Unit::TestCase
       Thread.new{
         SidekiqEmulator.instance.process_jobs
       }
-      sleep(1)
+      sleep(1) # TODO: refactor this somehow
       assert_equal 1, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_KEY)}.size
     end
 
@@ -92,9 +95,12 @@ class ServerMiddlewareTest < Minitest::Unit::TestCase
       assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_KEY)}.size
       HardWorker.perform_async(2, 1)
       Thread.new{
-        SidekiqEmulator.instance.process_jobs
+        @mutex.synchronize{
+          SidekiqEmulator.instance.process_jobs
+          @stopper.signal
+        }
       }
-      sleep(2)
+      @mutex.synchronize{ @stopper.wait(@mutex) }
       assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_KEY)}.size
     end
 
@@ -102,9 +108,12 @@ class ServerMiddlewareTest < Minitest::Unit::TestCase
       assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_KEY)}.size
       HardWorker.perform_async(2, -1)
       Thread.new{
-        SidekiqEmulator.instance.process_jobs
+        @mutex.synchronize{
+          SidekiqEmulator.instance.process_jobs rescue nil
+          @stopper.signal
+        }
       }
-      sleep(2)
+      @mutex.synchronize{ @stopper.wait(@mutex) }
       assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_KEY)}.size
     end
   end
