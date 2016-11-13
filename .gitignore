@@ -4,3 +4,4 @@
 Gemfile.lock
 rdoc
 tmp
+*.swp
