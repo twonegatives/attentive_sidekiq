@@ -14,8 +14,8 @@ require 'minitest/unit'
 require 'minitest/autorun'
 require 'minitest/pride'
 
-REDIS_URL = "redis://localhost:15"
-REDIS_NAMESPACE = 'testy'
+REDIS_URL = ENV["REDIS_URL"] || "redis://localhost:15"
+REDIS_NAMESPACE = ENV["REDIS_NAMESPACE"] || 'testy'
 REDIS = Sidekiq::RedisConnection.create(:url => REDIS_URL, :namespace => REDIS_NAMESPACE)
 
 Sidekiq.configure_server do |config|

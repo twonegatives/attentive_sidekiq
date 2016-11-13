@@ -1,5 +1,10 @@
 # Attentive Sidekiq
 
+[![Gem Version](https://badge.fury.io/rb/attentive_sidekiq.svg)](https://badge.fury.io/rb/attentive_sidekiq)
+[![Code Climate](https://codeclimate.com/github/twonegatives/attentive_sidekiq/badges/gpa.svg)](https://codeclimate.com/github/twonegatives/attentive_sidekiq)
+[![CircleCI](https://circleci.com/gh/twonegatives/attentive_sidekiq.svg?style=svg)](https://circleci.com/gh/twonegatives/attentive_sidekiq)
+
+
 ### Motivation
 It's common to face the issues with sidekiq killing jobs in the middle of processing and not putting them back to redis.
 This issue leads to jobs losage, which essentualy means probable loss of critical user data.
@@ -26,15 +31,6 @@ Configure your middleware chains, lookup Middleware usage on Sidekiq wiki for mo
     Sidekiq.configure_server do |config|
       config.server_middleware do |chain|
         chain.add AttentiveSidekiq::Middleware::Server::Attentionist
-      end
-      config.client_middleware do |chain|
-        chain.add AttentiveSidekiq::Middleware::Client::Attentionist
-      end
-    end
-    
-    Sidekiq.configure_client do |config|
-      config.client_middleware do |chain|
-        chain.add AttentiveSidekiq::Middleware::Client::Attentionist
       end
     end
 
