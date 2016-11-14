@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/attentive_sidekiq.svg)](https://badge.fury.io/rb/attentive_sidekiq)
 [![Code Climate](https://codeclimate.com/github/twonegatives/attentive_sidekiq/badges/gpa.svg)](https://codeclimate.com/github/twonegatives/attentive_sidekiq)
-[![CircleCI](https://circleci.com/gh/twonegatives/attentive_sidekiq.svg?style=svg)](https://circleci.com/gh/twonegatives/attentive_sidekiq)
+[![CircleCI](https://circleci.com/gh/twonegatives/attentive_sidekiq.svg?style=shield)](https://circleci.com/gh/twonegatives/attentive_sidekiq)
 
 
 ### Motivation
