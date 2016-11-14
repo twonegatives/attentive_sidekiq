@@ -10,7 +10,6 @@ require 'sidekiq/util'
 require 'sidekiq/redis_connection'
 require 'redis-namespace'
 require 'attentive_sidekiq'
-require 'minitest/unit'
 require 'minitest/autorun'
 require 'minitest/pride'
 

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class ServerMiddlewareTest < Minitest::Unit::TestCase
+class ServerMiddlewareTest < Minitest::Test
   describe "with real redis" do
     before do
       Sidekiq.redis = REDIS
