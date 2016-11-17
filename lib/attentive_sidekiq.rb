@@ -11,6 +11,8 @@ require 'attentive_sidekiq/web'
 
 module AttentiveSidekiq
   class << self
+    attr_writer :logger
+
     def logger
       @logger ||= Sidekiq.logger
     end
