@@ -4,7 +4,7 @@ module AttentiveSidekiq
 
     def self.registered(app)
       app.get('/disappeared-jobs') do
-        @suspicious_jobs  = AttentiveSidekiq::DisappearedSet.new.jobs
+        @suspicious_jobs  = AttentiveSidekiq::Disappeared.jobs
         erb File.read(File.join(VIEW_PATH, 'disappeared-list.erb'))
       end	
     end

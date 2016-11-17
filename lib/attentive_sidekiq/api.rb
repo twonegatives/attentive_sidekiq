@@ -1,45 +1,47 @@
 module AttentiveSidekiq
-  class DisappearedSet
-    attr_accessor :jobs, :job_ids
-    def initialize 
-      suspicious  = AttentiveSidekiq::SuspiciousSet.new.jobs
-      active_ids  = AttentiveSidekiq::ActiveSet.new.job_ids
-      @jobs       = suspicious.delete_if{|i| active_ids.include?(i["jid"])}
-      @job_ids    = @jobs.map{|i| i["jid"]}
-    end
+  class RedisBasedHash
+    class << self
+      def jobs
+        Sidekiq.redis{|conn| conn.hvals(hash_name)}.map{|i| JSON.parse(i)}
+      end
 
-    private
-    def clear
-      # TODO
-    end
+      def job_ids
+        jobs.map{|i| i["jid"]}
+      end
 
-    def remove jid
-      # TODO
+      def add item
+        Sidekiq.redis{ |conn| conn.hset(hash_name, item['jid'], item.to_json) }
+      end
+      
+      def remove jid
+        Sidekiq.redis{|conn| conn.hdel(hash_name, jid)}
+      end
+
+      private
+
+      def hash_name
+        self.const_get(:HASH_NAME)
+      end
     end
   end
   
-  class SuspiciousSet
-    attr_accessor :jobs, :job_ids
-    def initialize 
-      @jobs     = Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_KEY)}.map{|i| JSON.parse(i)}
-      @job_ids  = @jobs.map{|i| i["jid"]}
-    end
-
-    private
-    def clear
-      # TODO
-    end
-
-    def remove jid
-      # TODO
-    end
+  class Disappeared < RedisBasedHash
+    HASH_NAME = AttentiveSidekiq::Middleware::REDIS_DISAPPEARED_KEY
+  end
+  
+  class Suspicious < RedisBasedHash
+    HASH_NAME = AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY
   end
 
-  class ActiveSet
-    attr_accessor :jobs, :job_ids
-    def initialize
-      @jobs     = Sidekiq::Workers.new.to_a.map{|i| i[2]["payload"]}
-      @job_ids  = Set.new(jobs.map{|i| i["jid"]})
+  class Active
+    class << self
+      def jobs
+        Sidekiq::Workers.new.to_a.map{|i| i[2]["payload"]}
+      end
+
+      def job_ids
+        Set.new(jobs.map{|i| i["jid"]})
+      end
     end
   end
 end
