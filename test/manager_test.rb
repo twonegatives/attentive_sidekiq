@@ -39,7 +39,8 @@ class ManagerTest < Minitest::Test
     end
 
     def disappeared_now
-      Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_DISAPPEARED_KEY)}.map{|i| JSON.parse(i)}
+      from_redis = Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_DISAPPEARED_KEY)}
+      from_redis.map{|i| JSON.parse(i).except('noticed_at', 'status')}
     end
   end
 end

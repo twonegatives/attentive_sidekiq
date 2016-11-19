@@ -27,6 +27,15 @@ module AttentiveSidekiq
   
   class Disappeared < RedisBasedHash
     HASH_NAME = AttentiveSidekiq::Middleware::REDIS_DISAPPEARED_KEY
+    STATUS_DETECTED = 'detected'
+
+    class << self
+      alias_method :base_add, :add
+      
+      def add item
+        extended_item = {'noticed_at' => Time.now.to_i, 'status' => STATUS_DETECTED}.merge(item)
+        super extended_item
+      end
   end
   
   class Suspicious < RedisBasedHash

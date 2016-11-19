@@ -8,7 +8,9 @@
         <th><%= t('queue') %></th>
         <th><%= t('class') %></th>
         <th><%= t('arguments') %></th>
-        <th><%= t('time') %></th>
+        <th><%= t('created_at') %></th>
+        <th><%= t('noticed_at') %></th>
+        <th><%= t('status') %></th>
         <th><%= t('actions') %></th>
       </tr>
     </thead>
@@ -21,6 +23,8 @@
           <td><%= job['class'] %></td>
           <td><%= job['args'] %></td>
           <td><%= Time.at(job['created_at']).strftime("%H:%M:%S %d.%m.%Y %z") %></td>
+          <td><%= job['noticed_at'] ? Time.at(job['noticed_at']).strftime("%H:%M:%S %d.%m.%Y %z") : t("noticed_unknown") %></td>
+          <th><%= job['status'] ? t(job['status']) : t('detected') %></th>
           <td>
             <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/delete" %>" method="post">
               <%= csrf_tag %>

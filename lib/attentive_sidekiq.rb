@@ -1,4 +1,5 @@
 require 'set'
+require 'active_support/core_ext/hash'
 require 'concurrent'
 require 'attentive_sidekiq/middleware'
 require 'attentive_sidekiq/api'
