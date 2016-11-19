@@ -23,3 +23,5 @@ Sidekiq.configure_server do |config|
     chain.add AttentiveSidekiq::Middleware::Server::Attentionist
   end
 end
+
+Sidekiq.logger = nil

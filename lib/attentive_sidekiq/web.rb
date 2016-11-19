@@ -3,10 +3,10 @@ module AttentiveSidekiq
     VIEW_PATH = File.expand_path("../web/views", __FILE__)
 
     def self.registered(app)
-      app.get('/disappeared-jobs') do
-        @suspicious_jobs  = AttentiveSidekiq::Disappeared.jobs
+      app.get("/disappeared-jobs") do
+        @disappeared_jobs = AttentiveSidekiq::Disappeared.jobs
         erb File.read(File.join(VIEW_PATH, 'disappeared-list.erb'))
-      end	
+      end
 
       app.post("/disappeared-jobs/:jid/delete") do
         AttentiveSidekiq::Disappeared.remove(params['jid'])

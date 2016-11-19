@@ -28,7 +28,12 @@ To get only JIDs of lost jobs:
 AttentiveSidekiq::Disappeared.job_ids
 ```
 
-To remove a job from disappeared hash (e.g. after manual relaunch):
+To place a disappeared job back into queue:
+```ruby
+AttentiveSidekiq::Disappeared.requeue(jid)
+```
+
+To remove a job from disappeared hash (e.g. after manual requeue):
 ```ruby
 AttentiveSidekiq::Disappeared.remove(jid)
 ```
@@ -36,10 +41,18 @@ AttentiveSidekiq::Disappeared.remove(jid)
 ### Sidekiq Web integration
 You may also watch info about disappeared jobs in a web UI.
 Simply make sure you have Sidekiq UI enabled, then head right to the Disappeared Jobs tab in the navbar.
+The Web UI uses the API exclusively: anything you can do in the UI can be scripted with the API.
 
 ![Web UI](web.png)
 
+### Pre-requirements and notes
+
+- Attentive Sidekiq assumes you've got Sidekiq installed already.
+- You should make sure sidekiq process is started in order for disappeared jobs updater to work properly.
+- It was tested with Sidekiq version 4. Seamless functionality with lower sidekiq versions is not guaranteed.
+
 ### Installation
+
 Add this line to your application's Gemfile:
     
     gem 'attentive_sidekiq'
