@@ -7,6 +7,12 @@ module AttentiveSidekiq
         @suspicious_jobs  = AttentiveSidekiq::Disappeared.jobs
         erb File.read(File.join(VIEW_PATH, 'disappeared-list.erb'))
       end	
+
+      app.post("/disappeared-jobs/:jid/delete") do
+        AttentiveSidekiq::Disappeared.remove(params['jid'])
+        redirect "#{root_path}disappeared-jobs"
+      end
+
     end
   end
 end

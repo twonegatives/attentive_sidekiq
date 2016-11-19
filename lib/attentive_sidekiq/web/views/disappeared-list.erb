@@ -9,6 +9,7 @@
         <th><%= t('class') %></th>
         <th><%= t('arguments') %></th>
         <th><%= t('time') %></th>
+        <th><%= t('actions') %></th>
       </tr>
     </thead>
 
@@ -20,6 +21,12 @@
           <td><%= job['class'] %></td>
           <td><%= job['args'] %></td>
           <td><%= Time.at(job['created_at']).strftime("%H:%M:%S %d.%m.%Y %z") %></td>
+          <td>
+            <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/delete" %>" method="post">
+              <%= csrf_tag %>
+              <input class="btn btn-danger btn-xs" type="submit" name="delete" value="<%= t('delete') %>" data-confirm="<%= t('delete_confirmation') %>" />
+            </form>
+          </td>
         </tr>
       <% end %>
     </tbody>

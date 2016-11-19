@@ -5,3 +5,6 @@ ru:
   arguments: Аргументы
   disappeared_jobs: Пропавшие задачи
   time: Время
+  actions: Действия
+  delete: Удалить
+  delete_confirmation: Вы уверены, что хотите удалить эту запись? 
