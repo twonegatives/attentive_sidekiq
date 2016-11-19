@@ -13,7 +13,6 @@ class WebTest < Minitest::Test
     @item_in_progress = {'jid' => "REDA-257513", 'queue' => 'red_queue'}.merge!(common_hash)
 
     AttentiveSidekiq::Suspicious.add(@item_in_progress)
-    AttentiveSidekiq::Suspicious.add(@item_disappeared)
     AttentiveSidekiq::Disappeared.add(@item_disappeared)
   end
 
@@ -36,6 +35,15 @@ class WebTest < Minitest::Test
       assert_equal 200, last_response.status
     end
   end
+
+  def test_requeue_route_functions_fine
+    AttentiveSidekiq::Disappeared.stub(:requeue, nil) do
+      post "/disappeared-jobs/#{@item_disappeared['jid']}/requeue"
+      follow_redirect!
+      assert_equal 200, last_response.status
+    end
+  end
+
   private
 
   def app

@@ -9,6 +9,10 @@ module AttentiveSidekiq
         jobs.map{|i| i["jid"]}
       end
 
+      def get_job jid
+        JSON.parse(Sidekiq.redis{|conn| conn.hget(hash_name, jid)})
+      end
+
       def add item
         Sidekiq.redis{ |conn| conn.hset(hash_name, item['jid'], item.to_json) }
       end
@@ -28,6 +32,7 @@ module AttentiveSidekiq
   class Disappeared < RedisBasedHash
     HASH_NAME = AttentiveSidekiq::Middleware::REDIS_DISAPPEARED_KEY
     STATUS_DETECTED = 'detected'
+    STATUS_REQUEUED = 'requeued'
 
     class << self
       alias_method :base_add, :add
@@ -36,6 +41,13 @@ module AttentiveSidekiq
         extended_item = {'noticed_at' => Time.now.to_i, 'status' => STATUS_DETECTED}.merge(item)
         super extended_item
       end
+
+      def requeue jid
+        record = get_job(jid)
+        record['class'].constantize.perform_async(*record['args'])
+        base_add(record.merge('status' => STATUS_REQUEUED))
+      end
+    end
   end
   
   class Suspicious < RedisBasedHash

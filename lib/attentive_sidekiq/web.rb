@@ -13,6 +13,11 @@ module AttentiveSidekiq
         redirect "#{root_path}disappeared-jobs"
       end
 
+      app.post("/disappeared-jobs/:jid/requeue") do
+        AttentiveSidekiq::Disappeared.requeue(params['jid'])
+        redirect "#{root_path}disappeared-jobs"
+      end
+
     end
   end
 end

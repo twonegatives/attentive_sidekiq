@@ -28,8 +28,14 @@
           <td>
             <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/delete" %>" method="post">
               <%= csrf_tag %>
-              <input class="btn btn-danger btn-xs" type="submit" name="delete" value="<%= t('delete') %>" data-confirm="<%= t('delete_confirmation') %>" />
+              <input class="btn btn-danger btn-xs" type="submit" name="delete" value="<%= t('delete') %>" style="width:100%" data-confirm="<%= t('delete_confirmation') %>" />
             </form>
+            <% if job['status'] != AttentiveSidekiq::Disappeared::STATUS_REQUEUED %>
+              <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/requeue" %>" method="post">
+                <%= csrf_tag %>
+                <input class="btn btn-xs" type="submit" name="requeue" value="<%= t('requeue') %>" style="width:100%" data-confirm="<%= t('requeue_confirmation') %>" />
+              </form>
+            <% end %>
           </td>
         </tr>
       <% end %>

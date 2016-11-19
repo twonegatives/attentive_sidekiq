@@ -12,3 +12,6 @@ en:
   delete_confirmation: Are you sure you want to delete this record?
   status: Status
   detected: Detected
+  requeued: Requeued
+  requeue: Requeue
+  requeue_confirmation: Are you sure you want to requeue this job?

@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sidekiq', '~> 4.2'
   s.add_development_dependency 'rake', '~> 11.3'
   s.add_development_dependency 'minitest', '~> 5.0'
+  s.add_development_dependency 'minitest-stub_any_instance'
   s.add_development_dependency 'redis-namespace', '~> 1.5'
   s.add_development_dependency "rack-test", '~> 0.6'
   s.add_development_dependency 'pry', '~> 0.10'

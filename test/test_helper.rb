@@ -12,6 +12,7 @@ require 'redis-namespace'
 require 'attentive_sidekiq'
 require 'minitest/autorun'
 require 'minitest/pride'
+require 'minitest/stub_any_instance'
 
 REDIS_URL = ENV["REDIS_URL"] || "redis://localhost:15"
 REDIS_NAMESPACE = ENV["REDIS_NAMESPACE"] || 'testy'
