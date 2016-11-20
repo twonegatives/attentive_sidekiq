@@ -72,3 +72,7 @@ end
 ```
 
 After that you can use your jobs as usual.
+
+### Suggestions? Bugs?
+
+If you've got a question, feature suggestion or found a bug please add an [issue on GitHub](https://github.com/twonegatives/attentive_sidekiq/issues) or fork the project and send a pull request.
