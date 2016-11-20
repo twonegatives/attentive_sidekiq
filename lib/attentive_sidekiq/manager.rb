@@ -30,7 +30,7 @@ module AttentiveSidekiq
     
     def options
       timeout  = 1*60
-      interval = 1*60
+      interval = 10*60
       { execution_interval: interval, timeout_interval: timeout }
     end
     
