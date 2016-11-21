@@ -1,24 +1,21 @@
-# Attentive Sidekiq
+Attentive Sidekiq
+===========================
 
 [![Gem Version](https://badge.fury.io/rb/attentive_sidekiq.svg)](https://badge.fury.io/rb/attentive_sidekiq)
 [![Code Climate](https://codeclimate.com/github/twonegatives/attentive_sidekiq/badges/gpa.svg)](https://codeclimate.com/github/twonegatives/attentive_sidekiq)
 [![CircleCI](https://circleci.com/gh/twonegatives/attentive_sidekiq.svg?style=shield)](https://circleci.com/gh/twonegatives/attentive_sidekiq)
 
+Be aware of suddenly disappeared sidekiq jobs!
 
-### Motivation
-Bad things happen sometimes. Sidekiq process being killed in the middle of job processing may lead to job losage. In other words, that job will never be returned to the queue.
-This case was proved by [github issues](https://github.com/mperham/sidekiq/issues/1831), [stackoverflow questions](http://stackoverflow.com/questions/35555000/current-sidekiq-job-lost-when-deploying-to-heroku) and (sadly) personal experience, and means that you are not safe from losing critical user data.
-Sidekiq's author, Mike Perham, suggests purchasing Sidekiq Pro which uses another fetch mechanism. However, it [is reported](https://github.com/mperham/sidekiq/issues/2531) to still cause the same issue.
+![shortsummary](https://cloud.githubusercontent.com/assets/1937799/20489411/fe726e82-b023-11e6-9528-7df519fec7dd.gif)
 
-### About
-Attentive Sidekiq is a sidekiq plugin which makes one more step to guard your jobs from being lost (well, at least to be notified of this).
-It saves info about started jobs into additional redis hash and keeps them there till jobs are finished.
-In case there appears a job being started but not finished and not being processing at the moment, you will know something bad happened.
+### About 
+The case of disappearing sidekiq jobs was proved by [github issues](https://github.com/mperham/sidekiq/issues/1831), [stackoverflow questions](http://stackoverflow.com/questions/35555000/current-sidekiq-job-lost-when-deploying-to-heroku) and (sadly) personal experience. Attentive Sidekiq was made to protect your jobs and critical data from silent disappearing. In case there appears a job being started but not finished and not being processing at the moment, you will know this.
 
 ### Usage
 Attentive Sidekiq provides you with a couple of useful API methods.
 
-To get a hash containing all information about jobs marked as lost:
+To get a hash containing all information about jobs marked as disappeared:
 ```ruby
 AttentiveSidekiq::Disappeared.jobs
 ```
@@ -43,7 +40,7 @@ You may also watch info about disappeared jobs in a web UI.
 Simply make sure you have Sidekiq UI enabled, then head right to the Disappeared Jobs tab in the navbar.
 The Web UI uses the API exclusively: anything you can do in the UI can be scripted with the API.
 
-![Web UI](web.png)
+![webui](https://cloud.githubusercontent.com/assets/1937799/20490807/a01216d0-b028-11e6-96b7-c23fd67bdf89.png)
 
 ### Pre-requirements and notes
 
