@@ -20,17 +20,10 @@ module AttentiveSidekiq
       def remove jid
         Sidekiq.redis{|conn| conn.hdel(hash_name, jid)}
       end
-
-      private
-
-      def hash_name
-        self.const_get(:HASH_NAME)
-      end
     end
   end
   
   class Disappeared < RedisBasedHash
-    HASH_NAME = AttentiveSidekiq::Middleware::REDIS_DISAPPEARED_KEY
     STATUS_DETECTED = 'detected'
     STATUS_REQUEUED = 'requeued'
 
@@ -47,11 +40,19 @@ module AttentiveSidekiq
         record['class'].constantize.perform_async(*record['args'])
         base_add(record.merge('status' => STATUS_REQUEUED))
       end
+
+      def hash_name
+        AttentiveSidekiq::REDIS_DISAPPEARED_KEY
+      end
     end
   end
   
   class Suspicious < RedisBasedHash
-    HASH_NAME = AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY
+    class << self
+      def hash_name
+        AttentiveSidekiq::REDIS_SUSPICIOUS_KEY
+      end
+    end
   end
 
   class Active

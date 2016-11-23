@@ -78,21 +78,21 @@ class ServerMiddlewareTest < Minitest::Test
       assert_equal 0, DefaultQueue.instance.size
       HardWorker.perform_async(1)
       assert_equal 1, DefaultQueue.instance.size
-      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.size
+      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.size
     end
 
     it "marks job as suspicious as soon as it is started" do
-      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.size
+      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.size
       HardWorker.perform_async(2, 100_000)
       Thread.new{
         SidekiqEmulator.instance.process_jobs
       }
       sleep(1) # TODO: refactor this somehow
-      assert_equal 1, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.size
+      assert_equal 1, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.size
     end
 
     it "removes suspicious mark as soon as job is finished succesfully" do
-      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.size
+      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.size
       HardWorker.perform_async(2, 1)
       Thread.new{
         @mutex.synchronize{
@@ -101,11 +101,11 @@ class ServerMiddlewareTest < Minitest::Test
         }
       }
       @mutex.synchronize{ @stopper.wait(@mutex) }
-      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.size
+      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.size
     end
 
     it "removes suspicious mark as soon as job failed" do
-      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.size
+      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.size
       HardWorker.perform_async(2, -1)
       Thread.new{
         @mutex.synchronize{
@@ -114,7 +114,7 @@ class ServerMiddlewareTest < Minitest::Test
         }
       }
       @mutex.synchronize{ @stopper.wait(@mutex) }
-      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.size
+      assert_equal 0, Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.size
     end
   end
 end

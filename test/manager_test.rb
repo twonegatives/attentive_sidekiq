@@ -35,11 +35,11 @@ class ManagerTest < Minitest::Test
     end
 
     def suspicious_now
-      Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_SUSPICIOUS_KEY)}.map{|i| JSON.parse(i)}
+      Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_SUSPICIOUS_KEY)}.map{|i| JSON.parse(i)}
     end
 
     def disappeared_now
-      from_redis = Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::Middleware::REDIS_DISAPPEARED_KEY)}
+      from_redis = Sidekiq.redis{|conn| conn.hvals(AttentiveSidekiq::REDIS_DISAPPEARED_KEY)}
       from_redis.map{|i| JSON.parse(i).except('noticed_at', 'status')}
     end
   end
