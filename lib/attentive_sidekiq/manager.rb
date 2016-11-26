@@ -29,12 +29,11 @@ module AttentiveSidekiq
     private
     
     def options
-      timeout  = 1*60
-      interval = 10*60
-      { execution_interval: interval, timeout_interval: timeout }
+      { 
+        execution_interval: AttentiveSidekiq.execution_interval,
+        timeout_interval: AttentiveSidekiq.timeout_interval
+      }
     end
     
   end
 end
-
-AttentiveSidekiq::Manager.instance.start! if Sidekiq.server?

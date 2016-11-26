@@ -70,6 +70,24 @@ end
 
 After that you can use your jobs as usual.
 
+### Configuration
+
+Specify desired configuration inside of `sidekiq.yml` file:
+
+```YML
+attentive:
+  # Time in seconds between checks for disappeared jobs
+  :execution_interval: 300  # default: 600
+  # Time limit in seconds to perform disappeared jobs check
+  :timeout_interval: 25     # default: 60
+```
+
+By default, Attentive Sidekiq uses `Sidekiq.logger` to log its work. You may change it in your initializer:
+
+```ruby
+AttentiveSidekiq.logger = Logger.new("log/attentive_sidekiq.log")
+```
+
 ### Suggestions? Bugs?
 
 If you've got a question, feature suggestion or found a bug please add an [issue on GitHub](https://github.com/twonegatives/attentive_sidekiq/issues) or fork the project and send a pull request.
