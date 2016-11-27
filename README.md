@@ -2,6 +2,7 @@ Attentive Sidekiq
 ===========================
 
 [![Gem Version](https://badge.fury.io/rb/attentive_sidekiq.svg)](https://badge.fury.io/rb/attentive_sidekiq)
+[![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/attentive_sidekiq?type=total&total_label=&color=brightgreen)](https://rubygems.org/gems/attentive_sidekiq)
 [![Code Climate](https://codeclimate.com/github/twonegatives/attentive_sidekiq/badges/gpa.svg)](https://codeclimate.com/github/twonegatives/attentive_sidekiq)
 [![CircleCI](https://circleci.com/gh/twonegatives/attentive_sidekiq.svg?style=shield)](https://circleci.com/gh/twonegatives/attentive_sidekiq)
 
