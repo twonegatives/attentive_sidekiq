@@ -19,7 +19,7 @@ class ManagerTest < Minitest::Test
     it "removes lone job from suspicious and adds to disappeared" do
       AttentiveSidekiq::Active.stub(:job_ids, @active_job_ids) do
         AttentiveSidekiq::Manager.instance.update_disappeared_jobs
-        
+
         assert_includes disappeared_now, @item_disappeared
         refute_includes suspicious_now, @item_disappeared
       end
@@ -28,7 +28,7 @@ class ManagerTest < Minitest::Test
     it "leaves jobs which are being currently processed in suspicious" do
       AttentiveSidekiq::Active.stub(:job_ids, @active_job_ids) do
         AttentiveSidekiq::Manager.instance.update_disappeared_jobs
-        
+
         assert_includes suspicious_now, @item_in_progress
         refute_includes disappeared_now, @item_in_progress
       end

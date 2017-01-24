@@ -15,7 +15,7 @@ module AttentiveSidekiq
     timeout_interval: 60,
     execution_interval: 600,
   }
-    
+
   REDIS_SUSPICIOUS_KEY  = "attentive_observed_hash"
   REDIS_DISAPPEARED_KEY = "attentive_disappeared_hash"
 
