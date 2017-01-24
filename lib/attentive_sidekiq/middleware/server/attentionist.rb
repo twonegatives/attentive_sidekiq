@@ -2,6 +2,12 @@ module AttentiveSidekiq
   module Middleware
     module Server
       class Attentionist
+        def initialize(options = nil)
+          return unless options
+          AttentiveSidekiq.timeout_interval = options[:timeout_interval] if options.key?(:timeout_interval)
+          AttentiveSidekiq.execution_interval = options[:execution_interval] if options.key?(:execution_interval)
+        end
+
         def call(worker_instance, item, queue)
           Suspicious.add(item)
           yield

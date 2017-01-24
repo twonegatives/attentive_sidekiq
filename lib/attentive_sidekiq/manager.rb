@@ -1,11 +1,11 @@
 module AttentiveSidekiq
   class Manager
     @@instance = AttentiveSidekiq::Manager.new
-  
+
     def self.instance
       @@instance
     end
-  
+
     def start!
       task = Concurrent::TimerTask.new(options) do
         AttentiveSidekiq::Manager.instance.update_disappeared_jobs
@@ -13,7 +13,7 @@ module AttentiveSidekiq
       task.add_observer(AttentiveSidekiq::UpdaterObserver.new)
       task.execute
     end
-    
+
     def update_disappeared_jobs
       suspicious  = AttentiveSidekiq::Suspicious.jobs
       active_ids  = AttentiveSidekiq::Active.job_ids
@@ -25,15 +25,15 @@ module AttentiveSidekiq
     end
 
     private_class_method :new
-    
+
     private
-    
+
     def options
-      { 
+      {
         execution_interval: AttentiveSidekiq.execution_interval,
         timeout_interval: AttentiveSidekiq.timeout_interval
       }
     end
-    
+
   end
 end

@@ -11,6 +11,8 @@ require 'sidekiq/web' unless defined?(Sidekiq::Web)
 require 'attentive_sidekiq/web'
 
 module AttentiveSidekiq
+  module_function
+
   DEFAULTS = {
     timeout_interval: 60,
     execution_interval: 600,
@@ -19,27 +21,41 @@ module AttentiveSidekiq
   REDIS_SUSPICIOUS_KEY  = "attentive_observed_hash"
   REDIS_DISAPPEARED_KEY = "attentive_disappeared_hash"
 
-  class << self
-    attr_writer :timeout_interval, :execution_interval, :logger
-
-    def timeout_interval
-      return @timeout_interval if @timeout_interval
-      @timeout_interval = options[:timeout_interval] || DEFAULTS[:timeout_interval]
+  def timeout_interval
+    options.fetch(:timeout_interval) do
+      options[:timeout_interval] = DEFAULTS.fetch(:timeout_interval)
     end
+  end
 
-    def execution_interval
-      return @execution_interval if @execution_interval
-      @execution_interval = options[:execution_interval] || DEFAULTS[:execution_interval]
+  def timeout_interval=(timeout_interval)
+    options[:timeout_interval] = timeout_interval
+  end
+
+  def execution_interval
+    options.fetch(:execution_interval) do
+      options[:execution_interval] = DEFAULTS.fetch(:execution_interval)
     end
+  end
 
-    def logger
-      @logger ||= Sidekiq.logger
+  def execution_interval=(execution_interval)
+    options[:execution_interval] = execution_interval
+  end
+
+  def logger
+    @logger ||= Sidekiq.logger
+  end
+
+  def logger=(logger)
+    @logger = logger
+  end
+
+  def options
+    Sidekiq.options.fetch(:attentive) do
+      Sidekiq.options[:attentive] =
+        Sidekiq.options.fetch("attentive") do
+          {}
+        end.with_indifferent_access
     end
-
-    def options
-      Sidekiq.options["attentive"] || {}
-    end
-
   end
 end
 
