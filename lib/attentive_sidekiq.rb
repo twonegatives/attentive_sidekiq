@@ -58,5 +58,3 @@ module AttentiveSidekiq
     end
   end
 end
-
-AttentiveSidekiq::Manager.instance.start! if Sidekiq.server?
