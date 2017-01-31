@@ -18,7 +18,7 @@ class ConfigTest < Minitest::Test
     assert_equal default_execution_interval, AttentiveSidekiq.execution_interval
   end
 
-  def test_default_sidekiq_options
+  def test_default_options
     expected_options = { execution_interval: default_execution_interval, timeout_interval: default_timeout_interval}
     assert_equal expected_options, AttentiveSidekiq.options.symbolize_keys
   end
@@ -69,6 +69,20 @@ class ConfigTest < Minitest::Test
     Sidekiq.options[:attentive] = {}
     Sidekiq.options[:attentive][:timeout_interval] = new_timeout_interval
     assert_equal new_timeout_interval, AttentiveSidekiq.timeout_interval
+  end
+
+  def test_middleware_without_options_set_default_values
+    AttentiveSidekiq::Middleware::Server::Attentionist.new
+    expected_options = { execution_interval: default_execution_interval, timeout_interval: default_timeout_interval}
+    assert_equal expected_options, AttentiveSidekiq.options.symbolize_keys
+  end
+
+  def test_middleware_with_options
+    new_execution_interval = default_execution_interval + 100
+    new_timeout_interval = default_timeout_interval + 100
+    expected_options = { execution_interval: new_execution_interval, timeout_interval: new_timeout_interval}
+    AttentiveSidekiq::Middleware::Server::Attentionist.new(expected_options)
+    assert_equal expected_options, AttentiveSidekiq.options.symbolize_keys
   end
 
   private
