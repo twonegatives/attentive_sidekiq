@@ -50,11 +50,8 @@ module AttentiveSidekiq
   end
 
   def options
-    Sidekiq.options.fetch(:attentive) do
-      Sidekiq.options[:attentive] =
-        Sidekiq.options.fetch("attentive") do
-          {}
-        end.with_indifferent_access
-    end
+    @options ||= Sidekiq.options.fetch(:attentive) do
+      Sidekiq.options.fetch("attentive") do DEFAULTS.dup end
+    end.with_indifferent_access
   end
 end

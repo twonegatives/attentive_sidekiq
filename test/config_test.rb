@@ -1,25 +1,24 @@
 require "test_helper"
 
 class ConfigTest < Minitest::Test
-  SIDEKIQ_OPTIONS = Sidekiq.options
-
   def setup
     super
-    @execution_interval, @timeout_interval = Sidekiq.options[:attentive].values_at(:execution_interval, :timeout_interval)
+    @execution_interval, @timeout_interval = AttentiveSidekiq.options.values_at(:execution_interval, :timeout_interval)
+    AttentiveSidekiq.instance_eval do remove_instance_variable(:@options) end
   end
 
   def teardown
     super
+    AttentiveSidekiq.options.clear
+    AttentiveSidekiq.options.merge!(execution_interval: @execution_interval, timeout_interval: @timeout_interval)
     Sidekiq.options.delete(:attentive)
     Sidekiq.options.delete('attentive')
-    Sidekiq.options[:attentive] = { execution_interval: @execution_interval, timeout_interval: @timeout_interval }
     # Confirm the options were changed
     assert_equal default_timeout_interval, AttentiveSidekiq.timeout_interval
     assert_equal default_execution_interval, AttentiveSidekiq.execution_interval
   end
 
   def test_default_sidekiq_options
-    assert_equal SIDEKIQ_OPTIONS, Sidekiq.options
     expected_options = { execution_interval: default_execution_interval, timeout_interval: default_timeout_interval}
     assert_equal expected_options, AttentiveSidekiq.options.symbolize_keys
   end
