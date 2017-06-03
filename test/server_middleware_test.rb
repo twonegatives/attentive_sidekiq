@@ -48,7 +48,7 @@ class ServerMiddlewareTest < Minitest::Test
         options = { :concurrency => 1, :queues => ['default'] }
         Sidekiq::Manager.new(options)
       end
-      
+
       def work_unit
         fetch = Sidekiq::BasicFetch.new(:queues => ['default'])
         fetch.retrieve_work
@@ -58,7 +58,7 @@ class ServerMiddlewareTest < Minitest::Test
 
     class DefaultQueue
       @@instance = DefaultQueue.new
-      
+
       def self.instance
         @@instance
       end
