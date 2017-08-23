@@ -8,6 +8,21 @@ module AttentiveSidekiq
         erb File.read(File.join(VIEW_PATH, 'disappeared-list.erb'))
       end
 
+      app.post("/disappeared-jobs/requeue-all") do
+        AttentiveSidekiq::Disappeared.jobs.each do |job|
+          next if job['status'] # Skip already reenqueued jobs
+          AttentiveSidekiq::Disappeared.requeue(job['jid'])
+        end
+        redirect "#{root_path}disappeared-jobs"
+      end
+
+      app.post("/disappeared-jobs/delete-all") do
+        AttentiveSidekiq::Disappeared.jobs.each do |job|
+          AttentiveSidekiq::Disappeared.remove(job['jid'])
+        end
+        redirect "#{root_path}disappeared-jobs"
+      end
+
       app.post("/disappeared-jobs/:jid/delete") do
         AttentiveSidekiq::Disappeared.remove(params['jid'])
         redirect "#{root_path}disappeared-jobs"
@@ -17,7 +32,6 @@ module AttentiveSidekiq
         AttentiveSidekiq::Disappeared.requeue(params['jid'])
         redirect "#{root_path}disappeared-jobs"
       end
-
     end
   end
 end
