@@ -15,3 +15,8 @@ en:
   requeued: Requeued
   requeue: Requeue
   requeue_confirmation: Are you sure you want to requeue this job?
+  delete_all: Delete all
+  requeue_all: Requeue all
+  delete_all_confirmation: Are you sure you want to delete all disappeared jobs?
+  requeue_all_confirmation: Are you sure you want to requeue all disappeared jobs?
+  no_disappeared_jobs: No dissapeared jobs.

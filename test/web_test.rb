@@ -28,6 +28,22 @@ class WebTest < Minitest::Test
     refute_match @item_in_progress['jid'], last_response.body
   end
 
+  def test_delete_all_route_functions_fine
+    AttentiveSidekiq::Disappeared.stub(:remove, nil) do
+      post "/disappeared-jobs/delete-all"
+      follow_redirect!
+      assert_equal 200, last_response.status
+    end
+  end
+
+  def test_requeue_all_route_functions_fine
+    AttentiveSidekiq::Disappeared.stub(:requeue, nil) do
+      post "/disappeared-jobs/requeue-all"
+      follow_redirect!
+      assert_equal 200, last_response.status
+    end
+  end
+
   def test_delete_route_functions_fine
     AttentiveSidekiq::Disappeared.stub(:remove, nil) do
       post "/disappeared-jobs/#{@item_disappeared['jid']}/delete"

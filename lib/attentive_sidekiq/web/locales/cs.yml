@@ -1,0 +1,22 @@
+cs:
+  jid: JID
+  queue: Název fronty
+  class: Název třídy
+  arguments: Argumenty
+  disappeared_jobs: Ztracené úkoly
+  created_at: Vytvořeno
+  noticed_at: Noticed disappeared at
+  noticed_unknown: neznámý čas
+  actions: Akce
+  delete: Smazat
+  delete_confirmation: Jste si jisti, že chcete smazat tento záznam?
+  status: Stav
+  detected: Detekováno
+  requeued: Znovu zařazeno
+  requeue: Zařadit znovu
+  requeue_confirmation: Jste si jisti, že chcete tento úkol znovu zařadit?
+  delete_all: Smazat vše
+  requeue_all: Zařadit vše znovu
+  delete_all_confirmation: Jste si jisti, že chcete smazat všechny ztracené úkoly?
+  requeue_all_confirmation: Jste si jisti, že chcete znovu zařadit všechny ztracené úkoly?
+  no_disappeared_jobs: Nebyly nalezeny žádné ztracené úkoly.

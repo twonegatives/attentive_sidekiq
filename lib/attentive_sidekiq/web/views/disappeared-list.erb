@@ -1,44 +1,58 @@
 <h3><%= t('disappeared_jobs') %></h3>
 
-<div class="table_container">
-  <table class="table table-hover table-bordered table-striped table-white">
-    <thead>
-      <tr>
-        <th><%= t('jid') %></th>
-        <th><%= t('queue') %></th>
-        <th><%= t('class') %></th>
-        <th><%= t('arguments') %></th>
-        <th><%= t('created_at') %></th>
-        <th><%= t('noticed_at') %></th>
-        <th><%= t('status') %></th>
-        <th><%= t('actions') %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @disappeared_jobs.each do |job| %>
+<% if @disappeared_jobs.count > 0 %>
+  <div class="table_container">
+    <table class="table table-hover table-bordered table-striped table-white">
+      <thead>
         <tr>
-          <td><%= job['jid'] %></td>
-          <td><%= job['queue'] %></td>
-          <td><%= job['class'] %></td>
-          <td><%= job['args'] %></td>
-          <td><%= Time.at(job['created_at']).strftime("%H:%M:%S %d.%m.%Y %z") %></td>
-          <td><%= job['noticed_at'] ? Time.at(job['noticed_at']).strftime("%H:%M:%S %d.%m.%Y %z") : t("noticed_unknown") %></td>
-          <th><%= job['status'] ? t(job['status']) : t('detected') %></th>
-          <td>
-            <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/delete" %>" method="post">
-              <%= csrf_tag %>
-              <input class="btn btn-danger btn-xs" type="submit" name="delete" value="<%= t('delete') %>" style="width:100%" data-confirm="<%= t('delete_confirmation') %>" />
-            </form>
-            <% if job['status'] != AttentiveSidekiq::Disappeared::STATUS_REQUEUED %>
-              <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/requeue" %>" method="post">
-                <%= csrf_tag %>
-                <input class="btn btn-xs" type="submit" name="requeue" value="<%= t('requeue') %>" style="width:100%" data-confirm="<%= t('requeue_confirmation') %>" />
-              </form>
-            <% end %>
-          </td>
+          <th><%= t('jid') %></th>
+          <th><%= t('queue') %></th>
+          <th><%= t('class') %></th>
+          <th><%= t('arguments') %></th>
+          <th><%= t('created_at') %></th>
+          <th><%= t('noticed_at') %></th>
+          <th><%= t('status') %></th>
+          <th><%= t('actions') %></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+
+      <tbody>
+        <% @disappeared_jobs.each do |job| %>
+          <tr>
+            <td><%= job['jid'] %></td>
+            <td><%= job['queue'] %></td>
+            <td><%= job['class'] %></td>
+            <td><%= job['args'] %></td>
+            <td><%= Time.at(job['created_at']).strftime("%H:%M:%S %d.%m.%Y %z") %></td>
+            <td><%= job['noticed_at'] ? Time.at(job['noticed_at']).strftime("%H:%M:%S %d.%m.%Y %z") : t("noticed_unknown") %></td>
+            <th><%= job['status'] ? t(job['status']) : t('detected') %></th>
+            <td>
+              <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/delete" %>" method="post">
+                <%= csrf_tag %>
+                <input class="btn btn-danger btn-xs" type="submit" name="delete" value="<%= t('delete') %>" style="width:100%" data-confirm="<%= t('delete_confirmation') %>" />
+              </form>
+              <% if job['status'] != AttentiveSidekiq::Disappeared::STATUS_REQUEUED %>
+                <form action="<%= "#{root_path}disappeared-jobs/#{job['jid']}/requeue" %>" method="post">
+                  <%= csrf_tag %>
+                  <input class="btn btn-xs" type="submit" name="requeue" value="<%= t('requeue') %>" style="width:100%" data-confirm="<%= t('requeue_confirmation') %>" />
+                </form>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <form action="<%= "#{root_path}disappeared-jobs/delete-all" %>" method="post">
+    <%= csrf_tag %>
+    <input class="btn btn-danger btn-xs pull-right" type="submit" name="delete" value="<%= t('delete_all') %>" data-confirm="<%= t('delete_all_confirmation') %>">
+  </form>
+
+  <form action="<%= "#{root_path}disappeared-jobs/requeue-all" %>" method="post">
+    <%= csrf_tag %>
+    <input class="btn btn-danger btn-xs pull-right" type="submit" name="retry" value="<%= t('requeue_all') %>" data-confirm="<%= t('requeue_confirmation') %>">
+  </form>
+<% else %>
+  <div class="alert alert-success"><%= t('no_disappeared_jobs') %></div>
+<% end %>
