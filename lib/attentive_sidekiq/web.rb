@@ -10,8 +10,9 @@ module AttentiveSidekiq
 
       app.post("/disappeared-jobs/requeue-all") do
         AttentiveSidekiq::Disappeared.jobs.each do |job|
-          next if job['status'] # Skip already reenqueued jobs
-          AttentiveSidekiq::Disappeared.requeue(job['jid'])
+          if job['status'] == 'detected'
+            AttentiveSidekiq::Disappeared.requeue(job['jid'])
+          end
         end
         redirect "#{root_path}disappeared-jobs"
       end
