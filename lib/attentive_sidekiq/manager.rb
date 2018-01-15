@@ -25,7 +25,7 @@ module AttentiveSidekiq
       # Those jobs that appeared in the first suspicious list, but not the second one were simply finished
       # quickly by Sidekiq before showing up as active by a worker.
       suspicious  = AttentiveSidekiq::Suspicious.jobs
-      those_lost.delete_if{|i| !suspicious.include?(i["jid"])}
+      those_lost.delete_if{|i| !suspicious.any?{|j| i['jid'] == j['jid']} }
       
       those_lost.each do |job|
         Disappeared.add(job)
