@@ -23,7 +23,7 @@ module AttentiveSidekiq
     attr_writer :timeout_interval, :execution_interval, :logger
 
     def timeout_interval
-      return @execution_timeout if @execution_timeout
+      return @timeout_interval if @timeout_interval
       @timeout_interval = options[:timeout_interval] || DEFAULTS[:timeout_interval]
     end
 
