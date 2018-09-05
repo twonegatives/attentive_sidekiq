@@ -1,4 +1,4 @@
-require "test_helper"
+require_relative "test_helper"
 
 class ApiTest < Minitest::Test
   describe "with real redis" do
@@ -33,36 +33,43 @@ class ApiTest < Minitest::Test
       end
     end
 
-    describe "requeue" do
+    describe 'requeue' do
       it "adds jobs without args to sidekiq queue" do
         item = @disappeared_wo_args
-        assert_equal 0, Sidekiq::Queue.new.size
-        String.stub_any_instance("constantize", SimpleWorker) do
-          AttentiveSidekiq::Disappeared.requeue(item['jid'])
-        end
-        assert_equal 1, Sidekiq::Queue.new.size
-        element = Sidekiq::Queue.new.to_a.first
+        assert_equal 0, returned_queue(item).size
+
+        AttentiveSidekiq::Disappeared.requeue(item['jid'])
+
+        assert_equal 1, returned_queue(item).size
+        element = first_item_in_returned_queue(item)
         assert_equal item['class'], element['class']
         assert_equal item['args'], element['args']
       end
 
       it "adds job with args to sidekiq queue" do
         item = @disappeared_with_args
-        String.stub_any_instance("constantize", WorkerWithArgs) do
-          AttentiveSidekiq::Disappeared.requeue(item['jid'])
-        end
-        element = Sidekiq::Queue.new.to_a.first
-        assert_equal item['class'], element['class']
-        assert_equal item['args'], element['args']
+
+        AttentiveSidekiq::Disappeared.requeue(item['jid'])
+
+        element = first_item_in_returned_queue(item)
+        assert_equal(item['class'], element['class'])
+        assert_equal(item['args'], element['args'])
       end
 
       it "marks jobs as requeued" do
         item = @disappeared_wo_args
         assert_equal job_status(item), AttentiveSidekiq::Disappeared::STATUS_DETECTED
-        String.stub_any_instance("constantize", SimpleWorker) do
-          AttentiveSidekiq::Disappeared.requeue(item['jid'])
-        end
+
+        AttentiveSidekiq::Disappeared.requeue(item['jid'])
         assert_equal job_status(item), AttentiveSidekiq::Disappeared::STATUS_REQUEUED
+      end
+
+      def returned_queue(item)
+        Sidekiq::Queue.new(item['queue'])
+      end
+
+      def first_item_in_returned_queue(item)
+        returned_queue(item).to_a[0]
       end
 
       def job_status(item)
