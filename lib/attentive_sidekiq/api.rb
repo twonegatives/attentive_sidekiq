@@ -26,6 +26,7 @@ module AttentiveSidekiq
   class Disappeared < RedisBasedHash
     STATUS_DETECTED = 'detected'
     STATUS_REQUEUED = 'requeued'
+    SIDEKIQ_PUSH_OPTIONS = %w[queue class args retry backtrace].freeze
 
     class << self
       alias_method :base_add, :add
@@ -37,16 +38,21 @@ module AttentiveSidekiq
 
       def requeue jid
         record = get_job(jid)
-        Sidekiq::Client.push(
-          'class' => record['class'],
-          'args'  => record['args'],
-          'queue' => record['queue'])
+        Sidekiq::Client.push(create_options(record))
 
         base_add(record.merge('status' => STATUS_REQUEUED))
       end
 
       def hash_name
         AttentiveSidekiq::REDIS_DISAPPEARED_KEY
+      end
+
+    private
+
+      def create_options(item)
+        SIDEKIQ_PUSH_OPTIONS.each_with_object({}) do |option, mem|
+          mem[option] = item[option] if item.include?(option)
+        end
       end
     end
   end
