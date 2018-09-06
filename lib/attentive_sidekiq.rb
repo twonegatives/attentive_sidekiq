@@ -13,9 +13,9 @@ require 'attentive_sidekiq/web'
 module AttentiveSidekiq
   DEFAULTS = {
     timeout_interval: 60,
-    execution_interval: 600,
+    execution_interval: 600
   }
-    
+
   REDIS_SUSPICIOUS_KEY  = "attentive_observed_hash"
   REDIS_DISAPPEARED_KEY = "attentive_disappeared_hash"
 
@@ -37,9 +37,8 @@ module AttentiveSidekiq
     end
 
     def options
-      Sidekiq.options["attentive"] || {}
+      Sidekiq.options[:attentive] || Sidekiq.options['attentive'] || {}
     end
-
   end
 end
 
