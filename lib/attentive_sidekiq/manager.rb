@@ -31,6 +31,11 @@ module AttentiveSidekiq
         Disappeared.add(job)
         Suspicious.remove(job['jid'])
       end
+
+      # Auto re-enqueue, is this good?
+      AttentiveSidekiq::Disappeared.job_ids.each do |jid|
+        AttentiveSidekiq::Disappeared.requeue(jid)
+      end
     end
 
     private_class_method :new
