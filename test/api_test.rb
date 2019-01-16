@@ -14,12 +14,15 @@ class ApiTest < Minitest::Test
       @disappeared_wo_args    = {'jid' => "YE11OW5-247", 'queue' => 'yellow_queue'}.merge!(simple_hash)
       @disappeared_with_args  = {'jid' => "B1UE-441", 'queue' => 'blue_queue'}.merge!(args_hash)
       @disappeared_with_all_args_possible = { 'jid' => 'B1UE-441-ALL', 'queue' => 'blue_queue' }.merge(args_hash.merge(optional_options))
+      @disappeared_with_tenant = {'jid' => "PINK-567", 'queue' => 'pink_queue', 'apartment' => 'sample_tenant'}.merge!(args_hash)
 
       AttentiveSidekiq::Suspicious.add(@item_in_progress)
 
       AttentiveSidekiq::Disappeared.add(@disappeared_wo_args)
       AttentiveSidekiq::Disappeared.add(@disappeared_with_args)
       AttentiveSidekiq::Disappeared.add(@disappeared_with_all_args_possible)
+
+      AttentiveSidekiq::Disappeared.add(@disappeared_with_tenant)
     end
 
     class BaseWorker
@@ -73,6 +76,17 @@ class ApiTest < Minitest::Test
 
         AttentiveSidekiq::Disappeared.requeue(item['jid'])
         assert_equal job_status(item), AttentiveSidekiq::Disappeared::STATUS_REQUEUED
+      end
+
+      it "adds jobs with tenant information to sidekiq queue" do
+        item = @disappeared_with_tenant
+        assert_equal 0, returned_queue(item).size
+
+        AttentiveSidekiq::Disappeared.requeue(item['jid'])
+
+        assert_equal 1, returned_queue(item).size
+        element = item_in_returned_queue(item)
+        assert_equal item['apartment'], element['apartment']
       end
 
       def returned_queue(item)

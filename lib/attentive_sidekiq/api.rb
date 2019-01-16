@@ -26,7 +26,7 @@ module AttentiveSidekiq
   class Disappeared < RedisBasedHash
     STATUS_DETECTED = 'detected'
     STATUS_REQUEUED = 'requeued'
-    SIDEKIQ_PUSH_OPTIONS = %w[queue class args retry backtrace].freeze
+    SIDEKIQ_PUSH_OPTIONS = %w[queue class args retry backtrace apartment].freeze
 
     class << self
       alias_method :base_add, :add
