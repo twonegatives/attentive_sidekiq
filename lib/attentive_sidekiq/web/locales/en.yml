@@ -6,7 +6,7 @@ en:
   disappeared_jobs: Disappeared jobs
   created_at: Created at
   noticed_at: Noticed disappeared at
-  noticed_unknown: time unknown
+  time_unknown: Time unknown
   actions: Actions
   delete: Delete
   delete_confirmation: Are you sure you want to delete this record?

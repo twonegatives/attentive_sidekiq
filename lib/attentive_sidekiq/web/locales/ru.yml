@@ -6,7 +6,7 @@ ru:
   disappeared_jobs: Пропавшие задачи
   created_at: Создана
   noticed_at: Пропажа замечена
-  noticed_unknown: время неизвестно
+  time_unknown: время неизвестно
   actions: Действия
   delete: Удалить
   delete_confirmation: Вы уверены, что хотите удалить эту запись? 
