@@ -6,7 +6,7 @@ cs:
   disappeared_jobs: Ztracené úkoly
   created_at: Vytvořeno
   noticed_at: Noticed disappeared at
-  noticed_unknown: neznámý čas
+  time_unknown: neznámý čas
   actions: Akce
   delete: Smazat
   delete_confirmation: Jste si jisti, že chcete smazat tento záznam?
