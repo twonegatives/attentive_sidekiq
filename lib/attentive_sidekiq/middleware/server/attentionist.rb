@@ -3,10 +3,16 @@ module AttentiveSidekiq
     module Server
       class Attentionist
         def call(worker_instance, item, queue)
-          Suspicious.add(item)
+          reliable_job = item["adblock_reliable"]
+
+          if reliable_job
+            AttentiveSidekiq.logger.info("AttentiveSidekiq will monitor job: #{item}")
+            Suspicious.add(item)
+          end
+
           yield
         ensure
-          Suspicious.remove(item['jid'])
+          Suspicious.remove(item['jid']) if reliable_job
         end
       end
     end

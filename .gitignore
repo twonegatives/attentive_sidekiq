@@ -6,3 +6,4 @@ rdoc
 tmp
 *.swp
 *.rdb
+.idea

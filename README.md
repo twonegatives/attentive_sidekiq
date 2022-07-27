@@ -74,6 +74,12 @@ After that you can use your jobs as usual.
 
 Specify desired configuration inside of `sidekiq.yml` file:
 
+By default jobs will not be monitored, in order to enable monitoring of your job, you will need to add `:adblock_reliable => true` sidekiq option it e.g.
+```ruby
+sidekiq_options :queue => :accessibility, :retry => 3, :adblock_reliable => true
+```
+
+
 ```YML
 attentive:
   # Time in seconds between checks for disappeared jobs
